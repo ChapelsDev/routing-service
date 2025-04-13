@@ -1,10 +1,20 @@
 
----
-
 ```markdown
 # Routing Service
 
 This project sets up a routing service with Flask. The instructions below cover how to create a virtual environment, manage dependencies, control the database, and run the application both directly and inside a Docker container.
+
+# Dependencies
+
+- **DOCKER**
+    ```
+    https://www.docker.com/
+    ```
+- **Pyhton**
+    ```
+    https://www.python.org/
+
+    ```
 
 ## Virtual Environment Setup
 
@@ -90,5 +100,3 @@ To run the container and map port 5000 from the container to your host:
 ```bash
 docker run -p 5000:5000 -v routing_data:/app/data routing-service
 ```
-
----
