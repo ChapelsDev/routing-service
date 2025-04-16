@@ -22,7 +22,7 @@ db.init_app(app)
 ORS_API_KEY = "5b3ce3597851110001cf6248dd952248d5e3474e87d768da5b5aff3d"
 ors_client = openrouteservice.Client(key=ORS_API_KEY)
 
-app.config["SERVER_NAME"] = "localhost:5000"
+app.config["SERVER_NAME"] = os.environ.get("SERVER_NAME", "localhost:5000")
 
 
 with app.app_context():
