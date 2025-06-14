@@ -23,7 +23,7 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg://gui:gui_pwd@db:5432/rota_db
       ADMIN_PASSWORD: super-secreta
-      ORS_API_KEY: ${ORS_API_KEY:-change-me}
+      ORS_API_KEY: 5b3ce3597851110001cf6248dd952248d5e3474e87d768da5b5aff3d
     ports:
       - '5000:5000'
 

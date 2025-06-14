@@ -22,7 +22,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
 # Provide your ORS API Key (consider using environment variables for production)
-ORS_API_KEY = "5b3ce3597851110001cf6248dd952248d5e3474e87d768da5b5aff3d"
+ORS_API_KEY = os.getenv("ORS_API_KEY")
 ors_client = openrouteservice.Client(key=ORS_API_KEY)
 
 app.config["SERVER_NAME"] = "localhost:5000"
