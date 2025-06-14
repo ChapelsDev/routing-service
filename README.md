@@ -72,13 +72,6 @@ python manage.py recreate
 ## Docker Container Setup
 
 ### Build the Docker Image
-Build the Docker image with the tag `routing-service`:
 ```bash
-docker build -t routing-service .
-```
-
-### Running the Docker Container
-To run the container and map port 5000 from the container to your host:
-```bash
-docker run -p 5000:5000 -v routing_data:/app/data -e SERVER_NAME=mycustomhost:5000 routing-service
+docker compose up --build
 ```
