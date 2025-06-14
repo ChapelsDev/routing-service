@@ -1,7 +1,4 @@
 
----
-
-```markdown
 # Routing Service
 
 This project sets up a routing service with Flask. The instructions below cover how to create a virtual environment, manage dependencies, control the database, and run the application both directly and inside a Docker container.
