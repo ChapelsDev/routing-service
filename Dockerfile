@@ -10,6 +10,11 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends netcat-openbsd && \
+    rm -rf /var/lib/apt/lists/*
+
+
 # Copy the rest of your app's source code (including seed.py and entrypoint.sh)
 COPY . .
 

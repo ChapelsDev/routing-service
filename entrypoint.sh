@@ -1,12 +1,20 @@
 #!/bin/sh
-# entrypoint.sh
+set -e
 
-sleep 5
-# Or if using Flask-Migrate:
-# flask db upgrade
+# --- Espera pelo Postgres ----------------------------------------------------
+# Extrai host e porto da DATABASE_URL (ex.: postgresql+psycopg://user:pwd@db:5432/rota_db)
+host_port=$(echo "$DATABASE_URL" | sed -E 's|.*@([^:/]+):([0-9]+).*|\1 \2|')
+db_host=$(echo "$host_port" | cut -d' ' -f1)
+db_port=$(echo "$host_port" | cut -d' ' -f2)
 
-# Run the seed script to ensure at least one API key is present
+echo "[ENTRYPOINT] Waiting for Postgres at $db_host:$db_port ..."
+while ! nc -z "$db_host" "$db_port"; do
+  sleep 1
+done
+echo "[ENTRYPOINT] Postgres is up!"
+
+# --- Migrations / seed -------------------------------------------------------
 python src/seed.py
 
-# Now start the Flask application using Gunicorn
+# --- Arranca Gunicorn --------------------------------------------------------
 exec gunicorn --bind 0.0.0.0:5000 src.main:app

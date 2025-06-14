@@ -14,7 +14,10 @@ from models import db, Route, RouteStep, ApiKey  # make sure ApiKey is imported
 load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////app/data/routes.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+    "DATABASE_URL",
+    "postgresql+psycopg://gui:gui_pwd@db:5432/rota_db"
+)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
@@ -22,7 +25,7 @@ db.init_app(app)
 ORS_API_KEY = "5b3ce3597851110001cf6248dd952248d5e3474e87d768da5b5aff3d"
 ors_client = openrouteservice.Client(key=ORS_API_KEY)
 
-app.config["SERVER_NAME"] = os.environ.get("SERVER_NAME", "localhost:5000")
+app.config["SERVER_NAME"] = "localhost:5000"
 
 
 with app.app_context():
@@ -259,7 +262,7 @@ def create_route():
 
         # Since there is only ONE segment, it can't differ in >=2 segments.
         # => We'll return no alternative routes in this scenario
-        route_id = str(uuid.uuid4())
+        route_id = uuid.uuid4()
         new_route = Route(
             id=route_id,
             user_id=data.get("user_id"),
@@ -269,7 +272,7 @@ def create_route():
             details="Route created via ORS (2-waypoints). No alt can differ by >=2 segments.",
             distance_m=best_alt["distance_m"],
             duration_s=best_alt["duration_s"],
-            geometry=json.dumps(best_alt["geometry"])
+            geometry=best_alt["geometry"]
         )
         db.session.add(new_route)
 
@@ -397,7 +400,7 @@ def create_route():
         other_alts = valid_alts[:2]
 
     # Store best route in DB (use geometry of first segment or combine them as you wish)
-    route_id = str(uuid.uuid4())
+    route_id = uuid.uuid4()
     best_distance = best_route["total_distance_m"]
     best_duration = best_route["total_duration_s"]
     best_geometry = best_route["segments"][0]["geometry"]
@@ -500,8 +503,7 @@ def list_routes():
             for step in r.steps
         ]
 
-        route_geometry = json.loads(r.geometry) if r.geometry else None
-
+        route_geometry = r.geometry
         results.append({
             "id": r.id,
             "origin": json.loads(r.origin),
