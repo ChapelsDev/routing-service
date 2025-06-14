@@ -89,11 +89,7 @@ python manage.py recreate
 
 ## Docker Container Setup
 
-### Build and run the Docker
-Build the Docker image with the tag `routing-service`:
-
+### Build the Docker Image
 ```bash
 docker compose up --build
 ```
-
----
